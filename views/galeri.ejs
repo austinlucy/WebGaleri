@@ -1,0 +1,39 @@
+<%- include('partials/header') %>
+
+<div class="container my-4">
+  <h2 class="mb-4 text-center text-primary">Galeri <%= kategori.charAt(0).toUpperCase() + kategori.slice(1) %></h2>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+    <% data.forEach(objek => { %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img 
+            src="<%= objek.image ? ('/img/' + objek.image) : '/img/default-image.png' %>" 
+            class="card-img-top" 
+            alt="<%= objek.nama %>" 
+            style="height: 180px; object-fit: cover;" 
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-primary"><%= objek.nama %></h5>
+            <p class="card-text flex-grow-1"><%= objek.deskripsi %></p>
+
+            <% if (objek.audio) { %>
+              <audio controls class="w-100 mt-auto">
+                <source src="/audio/<%= objek.audio %>" type="audio/mpeg" />
+                Browsermu tidak mendukung elemen audio.
+              </audio>
+            <% } %>
+
+            <% if (user && user.role === 'admin') { %>
+              <form action="/gallery/delete/<%= objek.id %>" method="POST" onsubmit="return confirm('Yakin ingin menghapus item ini?');">
+                <button type="submit" class="btn btn-danger btn-sm mt-2">Hapus</button>
+              </form>
+            <% } %>
+          </div>          
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
